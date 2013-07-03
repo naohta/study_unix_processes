@@ -1,4 +1,5 @@
-child_processes = 99999999923
+#child_processes = 223 #-> OK
+child_processes = ARGV[0].to_i
 dead_processes = 0
 
 child_processes.times do
@@ -16,7 +17,7 @@ trap(:CHLD) do
     while pid = Process.wait(-1, Process::WNOHANG)
       dead_processes += 1
       puts "[Parent]Detect signal! #{pid} is dead. [#{dead_processes}] deads"
-      abort "[Parent] Parent was aborted." if dead_processes == child_processes
+      abort "[Parent] Parent was aborted. [#{child_processes}]" if dead_processes == child_processes
     end
   rescue Errno::ECHILD
   end
